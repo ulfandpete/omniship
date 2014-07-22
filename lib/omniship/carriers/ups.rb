@@ -245,9 +245,11 @@ module Omniship
                 }
               end
             }
+
             packages.each do |package|
               imperial = ['US', 'LR', 'MM'].include?(origin.country_code(:alpha2))
               xml.Package {
+                xml.Description package.options[:package_description] if package.options[:package_description].present?
                 xml.PackagingType {
                   xml.Code package.options[:package_type]
                 }
@@ -265,9 +267,9 @@ module Omniship
                     xml.Code imperial ? 'LBS' : 'KGS'
                   }
                   value = ((imperial ? package.lbs : package.kgs).to_f*1000).round/1000.0 # decimals
+                  puts 'Package weight' value
                   xml.Weight [value, 0.1].max
                 }
-                xml.Description package.options[:package_description] if package.options[:package_description].present?
                 xml.PackageServiceOptions {
                   if package.options[:delivery_confirmation_type].present?
                     xml.DeliveryConfirmation {
@@ -288,12 +290,13 @@ module Omniship
                 end
               }
             end
+
             xml.LabelSpecification {
               xml.LabelPrintMethod {
                 xml.Code 'GIF'
               }
               xml.LabelImageFormat {
-                xml.Code 'PNG'
+                xml.Code 'GIF'
               }
             }
           }
