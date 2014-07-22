@@ -128,6 +128,7 @@ module Omniship
       packages             = Array(packages)
       access_request       = build_access_request
       ship_confirm_request = build_ship_confirm(origin, destination, packages, options)
+      puts ship_confirm_request
       response             = commit(:shipconfirm, save_request(access_request.gsub("\n", "") + ship_confirm_request.gsub("\n", "")), options[:test])
       parse_ship_confirm_response(origin, destination, packages, response, options)
     end
@@ -213,6 +214,14 @@ module Omniship
             xml.RequestOption options[:nonvalidate] ? 'nonvalidate' : 'validate'
           }
           xml.Shipment {
+            if options[:return_service_code].present?
+              xml.ReturnService {
+                xml.Code options[:return_service_code]
+                # if options[:return_service_description].present?
+                #   xml.Description options[:return_service_description]
+                # end
+              }
+            end
             build_location_node(['Shipper'], (options[:shipper] || origin), options, xml)
             build_location_node(['ShipTo'], destination, options, xml)
             if options[:shipper] && options[:shipper] != origin
@@ -225,14 +234,6 @@ module Omniship
                 }
               }
             }
-            if options[:return_service_code].present?
-              xml.ReturnService {
-                xml.Code options[:return_service_code]
-                # if options[:return_service_description].present?
-                #   xml.Description options[:return_service_description]
-                # end
-              }
-            end
             xml.Service {
               xml.Code options[:service]
             }
