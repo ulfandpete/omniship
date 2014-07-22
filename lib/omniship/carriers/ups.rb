@@ -267,7 +267,7 @@ module Omniship
                     xml.Code imperial ? 'LBS' : 'KGS'
                   }
                   value = ((imperial ? package.lbs : package.kgs).to_f*1000).round/1000.0 # decimals
-                  puts 'Package weight' value
+                  puts 'Package weight', value
                   xml.Weight [value, 0.1].max
                 }
                 xml.PackageServiceOptions {
