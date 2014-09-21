@@ -174,7 +174,7 @@ module Omniship
     def upsified_location(location)
       if location.country_code == 'US' && US_TERRITORIES_TREATED_AS_COUNTRIES.include?(location.state)
         atts = {:country => location.state}
-        [:zip, :city, :address1, :address2, :address3, :phone, :fax, :address_type, :attention_name].each do |att|
+        [:zip, :city, :address1, :address2, :address3, :phone, :fax, :email, :address_type, :attention_name].each do |att|
           atts[att] = location.send(att)
         end
         Address.new(atts)
@@ -471,6 +471,7 @@ module Omniship
           xml.CompanyName location.company_name unless location.company_name.blank?
           xml.PhoneNumber location.phone.gsub(/[^\d]/, '') unless location.phone.blank?
           xml.FaxNumber location.fax.gsub(/[^\d]/, '') unless location.fax.blank?
+          xml.EMailAddress location.email.gsub(/[^\d]/, '') unless location.email.blank?
 
           if name =='Shipper' and (origin_account = @options[:origin_account] || options[:origin_account])
             xml.ShipperNumber origin_account
@@ -546,8 +547,8 @@ module Omniship
           end
         end
 
-        puts 'tracking_number: ' + tracking_number
-        puts 'estimated_delivery_date: ' + estimated_delivery_date.to_s
+        # puts 'tracking_number: ' + tracking_number
+        # puts 'estimated_delivery_date: ' + estimated_delivery_date.to_s
 
         activities = []
         xml.xpath('/*/Shipment/Package/Activity').each do |activity|
