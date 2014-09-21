@@ -246,7 +246,7 @@ module Omniship
               end
             }
             # This is a try
-            xml.Description xml.Code 'HALLOHO'
+            xml.Description 'HALLOHO'
 
             packages.each do |package|
               imperial = ['US', 'LR', 'MM'].include?(origin.country_code(:alpha2))
