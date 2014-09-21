@@ -473,7 +473,11 @@ module Omniship
           xml.FaxNumber location.fax.gsub(/[^\d]/, '') unless location.fax.blank?
           xml.EMailAddress location.email.gsub(/[^\d]/, '') unless location.email.blank?
 
-          puts 'building location node, email is ' + location.email
+          if location.email.blank?
+            puts 'building location node, email is blank.'
+          else
+            puts 'building location node, email is ' + location.email
+          end
           # puts 'Verification results in ' + location.email.blank? ? 'true' : 'false'
 
           if name =='Shipper' and (origin_account = @options[:origin_account] || options[:origin_account])
