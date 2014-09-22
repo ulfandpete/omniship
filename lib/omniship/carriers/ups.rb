@@ -215,6 +215,9 @@ module Omniship
           }
           xml.Shipment {
             if options[:return_service_code].present?
+              # This is a try
+              xml.Description 'HALLOHO'
+
               xml.ReturnService {
                 xml.Code options[:return_service_code]
                 # if options[:return_service_description].present?
@@ -245,8 +248,6 @@ module Omniship
                 }
               end
             }
-            # This is a try
-            xml.Description 'HALLOHO'
 
             packages.each do |package|
               imperial = ['US', 'LR', 'MM'].include?(origin.country_code(:alpha2))
