@@ -214,10 +214,9 @@ module Omniship
             xml.RequestOption options[:nonvalidate] ? 'nonvalidate' : 'validate'
           }
           xml.Shipment {
+            # This is a try
+            xml.Description 'HALLOHO'
             if options[:return_service_code].present?
-              # This is a try
-              xml.Description 'HALLOHO'
-
               xml.ReturnService {
                 xml.Code options[:return_service_code]
                 # if options[:return_service_description].present?
