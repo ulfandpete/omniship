@@ -746,6 +746,8 @@ module Omniship
     end
 
     def commit(action, request, test = false)
+      puts "Now I am standing before the commit."
+      puts "Test: " + (test ? "true" : "false")
       ssl_post("#{test ? TEST_URL : LIVE_URL}/#{RESOURCES[action]}", request)
     end
 
