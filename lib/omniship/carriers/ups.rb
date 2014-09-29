@@ -125,6 +125,7 @@ module Omniship
       origin, destination  = upsified_location(origin), upsified_location(destination)
       options              = @options.merge(options)
       options[:test]       = options[:test].nil? ? true : options[:test]
+      puts "Using " + (options[:test] ? "test" : "live") + " environment"
       packages             = Array(packages)
       access_request       = build_access_request
       ship_confirm_request = build_ship_confirm(origin, destination, packages, options)
@@ -214,8 +215,6 @@ module Omniship
             xml.RequestOption options[:nonvalidate] ? 'nonvalidate' : 'validate'
           }
           xml.Shipment {
-            # This is a try
-            xml.Description 'HALLOHO'
             if options[:return_service_code].present?
               xml.ReturnService {
                 xml.Code options[:return_service_code]
@@ -473,14 +472,7 @@ module Omniship
           xml.CompanyName location.company_name unless location.company_name.blank?
           xml.PhoneNumber location.phone.gsub(/[^\d]/, '') unless location.phone.blank?
           xml.FaxNumber location.fax.gsub(/[^\d]/, '') unless location.fax.blank?
-          xml.EMailAddress location.email.gsub(/[^\d]/, '') unless location.email.blank?
-
-          if location.email.blank?
-            puts 'building location node, email is blank.'
-          else
-            puts 'building location node, email is ' + location.email
-          end
-          # puts 'Verification results in ' + location.email.blank? ? 'true' : 'false'
+          xml.EMailAddress location.email unless location.email.blank?
 
           if name =='Shipper' and (origin_account = @options[:origin_account] || options[:origin_account])
             xml.ShipperNumber origin_account
