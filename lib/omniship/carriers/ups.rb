@@ -116,7 +116,7 @@ module Omniship
       access_request   = build_access_request
       tracking_request = build_tracking_request(tracking_number, options)
       response         = commit(:track, save_request(access_request.gsub("\n", "") + tracking_request.gsub("\n", "")), options[:test])
-      # parse_tracking_response(response, options)
+      parse_tracking_response(response, options)
     end
 
     # Creating shipping functionality for UPS
