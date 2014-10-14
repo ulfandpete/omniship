@@ -125,7 +125,6 @@ module Omniship
       origin, destination  = upsified_location(origin), upsified_location(destination)
       options              = @options.merge(options)
       options[:test]       = options[:test].nil? ? true : options[:test]
-      puts "Using " + (options[:test] ? "test" : "live") + " environment"
       packages             = Array(packages)
       access_request       = build_access_request
       ship_confirm_request = build_ship_confirm(origin, destination, packages, options)
@@ -454,11 +453,12 @@ module Omniship
             xml.TransactionReference {
             }
             xml.RequestAction "Track"
+            xml.RequestOption "1"
           }
           xml.TrackingNumber tracking_number.to_s
-          xml.ShipmentType {
-            xml.Code "01"
-          }
+          # xml.ShipmentType {
+          #   xml.Code "01"
+          # }
         }
       end
       builder.to_xml
@@ -746,8 +746,6 @@ module Omniship
     end
 
     def commit(action, request, test = false)
-      puts "Now I am standing before the commit."
-      puts "Test: " + (test ? "true" : "false")
       ssl_post("#{test ? TEST_URL : LIVE_URL}/#{RESOURCES[action]}", request)
     end
 
